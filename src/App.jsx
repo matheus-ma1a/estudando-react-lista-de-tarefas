@@ -8,6 +8,12 @@ function App() {
 
   const [list, setList] = useState([])
 
+  const [listFeito, setListFeito]= useState([])
+
+  const [elementoAserRenderido, setElementoAserRenderizado] = useState(()=>{
+    
+  })
+
   useEffect(()=>{
     
     setList([
@@ -41,40 +47,76 @@ function App() {
       setList(newList)
   }
 
+  const mandandoParaFeito = (index)=>{
+    
+    let newListFeito = [...listFeito,list[index]]
+
+    setListFeito(newListFeito)
+     
+  
+  }
+  
+
+
   return (
 
 
     <div className="App">
       <h1>lista de tarefas</h1>
-      <SearchBox
-        frasePadrao='Adicione um novo item'
-        onEnter={addActiom}
+      <SearchBox frasePadrao='Adicione uma nova tarefa' onEnter={addActiom}
       />
 
-      <ul className="mainUl" >
-        {list.map((item,index)=>(
+      <div>
 
-          <li className="mainLI" key={index.toString()}  >
+        <p>A fazer</p> 
+
+        <ul className="mainUl" >
+
+
+          {list.map((item,index)=>(
+
+            <li className="mainLI" key={index.toString()}  >
+              
+              {item.done && 
+                <del>{item.tarefa}</del>
+              }
+
+              {!item.done &&
+                item.tarefa
+              }
+
+              <div className="toggleButton" onClick={()=>{handleChek(index)}} >
+                {item.done && <AiFillCloseCircle  className="close"/> }
+                {!item.done && <AiFillCheckCircle onClick={()=>{mandandoParaFeito(index)}} className="check" /> }
+              </div>
+
             
-            {item.done && 
-              <del>{item.tarefa}</del>
-            }
+            </li>
 
-            {!item.done &&
-              item.tarefa
-            }
-
-            <div className="toggleButton" onClick={()=>{handleChek(index)}} >
-              {item.done && <AiFillCloseCircle className="close"/> }
-              {!item.done && <AiFillCheckCircle className="check" /> }
-            </div>
-
-          </li>
-
-        ))}
+          ))}
 
 
-      </ul>
+        </ul>
+
+        <div>
+          <p>Feito</p>
+            <ul>
+              {listFeito.map((item,index)=>{
+
+                return(
+
+                  <li key={index} >
+                    {item.tarefa}
+                  </li>
+
+                )
+
+              })}
+            </ul>
+        </div>
+
+      </div>
+
 
     </div>
   );
